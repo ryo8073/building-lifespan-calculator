@@ -1,3 +1,4 @@
+"use client";
 import React, { useMemo } from 'react';
 import { buildingLifespanData } from '../features/data-management/buildingLifespanData';
 import { useStatutoryLifespanFilter } from '../features/statutory-lifespan/hooks/useStatutoryLifespanFilter';
@@ -65,7 +66,7 @@ export default function Home() {
             <select className="w-full border rounded p-2" value={thickness} onChange={e => setThickness(e.target.value)} disabled={!details || thicknessOptions.length === 0}>
               <option value="">選択してください</option>
               {thicknessOptions.map(opt => (
-                <option key={opt} value={opt}>{opt}</option>
+                <option key={opt ?? ''} value={opt ?? ''}>{opt ?? ''}</option>
               ))}
             </select>
           </div>
