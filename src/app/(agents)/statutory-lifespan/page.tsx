@@ -1,3 +1,4 @@
+"use client";
 import { useState } from 'react';
 import { buildingLifespanData } from '@/features/data-management/buildingLifespanData';
 import { StructureSelector } from '@/features/statutory-lifespan/components/StructureSelector';

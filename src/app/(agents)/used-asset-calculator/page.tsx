@@ -1,3 +1,4 @@
+"use client";
 import { useEffect } from 'react';
 import { useRootAgent } from '@/features/root-agent/RootAgentProvider';
 import { useUsedAssetCalculation } from '@/features/used-asset-calculator/hooks/useUsedAssetCalculation';
