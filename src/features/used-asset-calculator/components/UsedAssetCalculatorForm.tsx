@@ -16,6 +16,7 @@ import { Select } from '@/components/ui/Select';
 /**
  * 中古資産耐用年数計算フォーム
  * @param cardClassName - カードの追加クラス
+ * @param inputGroupClassName - 入力グループの追加クラス
  */
 export type UsedAssetCalculatorFormValues = {
   purchasePrice: string;
@@ -27,9 +28,11 @@ export type UsedAssetCalculatorFormValues = {
 };
 
 export function UsedAssetCalculatorForm({
-  cardClassName = "bg-gray-50 dark:bg-neutral-900"
+  cardClassName = "bg-gray-50 dark:bg-neutral-900",
+  inputGroupClassName = "",
 }: {
   cardClassName?: string;
+  inputGroupClassName?: string;
 }) {
   const usefulLifeEntry = useUsefulLifeStore((s) => s.usefulLifeEntry);
   const [result, setResult] = useState<ReturnType<typeof calculateUsedAssetUsefulLife> | null>(null);
@@ -138,7 +141,7 @@ export function UsedAssetCalculatorForm({
       <h2 className="text-xl font-semibold mb-4">2. 中古資産の耐用年数を計算</h2>
       <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} aria-label="中古資産耐用年数計算フォーム">
         {/* 購入価額 */}
-        <div className="p-4 mb-2">
+        <div className={`p-4 mb-2 ${inputGroupClassName}`}>
           <Label htmlFor="purchasePrice" required>
             購入価額 <span className="text-red-500">*</span>
           </Label>
@@ -165,7 +168,7 @@ export function UsedAssetCalculatorForm({
           <div className="text-xs text-muted-foreground mt-1">{formatNumberWithComma(watch('purchasePrice'))}</div>
         </div>
         {/* 改良費 */}
-        <div className="p-4 mb-2">
+        <div className={`p-4 mb-2 ${inputGroupClassName}`}>
           <Label htmlFor="improvementCost">
             うち改良に要した金額
           </Label>
@@ -192,7 +195,7 @@ export function UsedAssetCalculatorForm({
           <div className="text-xs text-muted-foreground mt-1">{formatNumberWithComma(watch('improvementCost'))}</div>
         </div>
         {/* 経過年月 */}
-        <div className="flex gap-2 items-end p-4 mb-2">
+        <div className={`flex gap-2 items-end p-4 mb-2 ${inputGroupClassName}`}>
           <div className="flex-1">
             <Label htmlFor="elapsedYears" required>
               経過年数 <span className="text-red-500">*</span>
@@ -238,7 +241,7 @@ export function UsedAssetCalculatorForm({
           </div>
         </div>
         {/* 法定耐用年数 */}
-        <div className="p-4 mb-2">
+        <div className={`p-4 mb-2 ${inputGroupClassName}`}>
           <Label htmlFor="originalUsefulLife" required>
             法定耐用年数 <span className="text-red-500">*</span>
           </Label>
@@ -264,7 +267,7 @@ export function UsedAssetCalculatorForm({
           )}
         </div>
         {/* 再取得価額 */}
-        <div className="p-4 mb-2">
+        <div className={`p-4 mb-2 ${inputGroupClassName}`}>
           <Label htmlFor="reacquisitionPrice">
             再取得価額
           </Label>
