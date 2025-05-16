@@ -1,27 +1,28 @@
+// 計算根拠パネル（ロジック・判定表・式の明示）
+// PRD・Cursor Rulesに基づき、計算式・途中経過・判定ロジックを明示し、UI/UX・アクセシビリティも厳密実装
+
 "use client";
 import React, { useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { UsedAssetCalculationInput } from '@/features/data-management/usedAssetCalculationLogic';
 
 function formatNumber(n: number | string | undefined) {
   if (n === undefined || n === null || n === '—') return '—';
   return Number(n).toLocaleString();
 }
 
+/**
+ * 計算根拠パネル（ロジック・判定表・式の明示）
+ * @param cardClassName - カードの追加クラス
+ * @param values - 計算に使う入力値
+ */
 export function LogicInfoPanel({
   cardClassName = "bg-muted/60",
   values,
-  // calcResult（未使用）
 }: {
   cardClassName?: string;
-  values?: {
-    originalUsefulLife?: number;
-    elapsedYears?: number;
-    purchasePrice?: number;
-    improvementCost?: number;
-    reacquisitionPrice?: number;
-  };
-  // calcResult（未使用）
+  values?: UsedAssetCalculationInput;
 }) {
   const [open, setOpen] = useState(true);
   // 動的な式生成

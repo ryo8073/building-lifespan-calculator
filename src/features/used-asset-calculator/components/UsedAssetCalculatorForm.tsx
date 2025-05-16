@@ -6,11 +6,17 @@ import { Label } from '@/components/ui/Label';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useUsefulLifeStore } from '@/lib/store';
-import { calculateUsedAssetUsefulLife } from '@/features/data-management/usedAssetCalculationLogic';
+import { calculateUsedAssetUsefulLife, UsedAssetCalculationInput } from '@/features/data-management/usedAssetCalculationLogic';
 import { LogicInfoPanel } from '@/features/used-asset-calculator/components/LogicInfoPanel';
 import { Select } from '@/components/ui/Select';
 
-// 型定義（削除されている場合用）
+// 中古資産耐用年数計算フォーム
+// PRD・Cursor Rulesに基づき、UI/UX・バリデーション・計算ロジック分岐・アクセシビリティを厳密実装
+
+/**
+ * 中古資産耐用年数計算フォーム
+ * @param cardClassName - カードの追加クラス
+ */
 export type UsedAssetCalculatorFormValues = {
   purchasePrice: string;
   improvementCost: string;
@@ -51,10 +57,13 @@ export function UsedAssetCalculatorForm({
     setValue('originalUsefulLife', String(usefulLifeEntry?.usefulLife ?? ''));
   }, [usefulLifeEntry, setValue]);
 
+  /**
+   * フォーム送信時の計算ロジック
+   */
   const onSubmit = (data: UsedAssetCalculatorFormValues) => {
     // 入力値を計算ロジック用に整形
     const elapsedYears = Number(data.elapsedYears) + Number(data.elapsedMonths || 0) / 12;
-    const input = {
+    const input: UsedAssetCalculationInput = {
       originalUsefulLife: Number(data.originalUsefulLife),
       elapsedYears,
       purchasePrice: Number(data.purchasePrice),
@@ -73,10 +82,11 @@ export function UsedAssetCalculatorForm({
     };
     // 判定表の分岐ロジック
     let selectedResult = kanbenResult;
+    const improvementCost = input.improvementCost ?? 0;
     if (input.reacquisitionPrice !== undefined) {
-      if (input.improvementCost > input.reacquisitionPrice * 0.5) {
+      if (improvementCost > input.reacquisitionPrice * 0.5) {
         selectedResult = houteiResult;
-      } else if (input.purchasePrice * 0.5 < input.improvementCost && input.improvementCost <= input.reacquisitionPrice * 0.5) {
+      } else if (input.purchasePrice * 0.5 < improvementCost && improvementCost <= input.reacquisitionPrice * 0.5) {
         selectedResult = mitsumoriResult;
       }
     }
@@ -84,6 +94,9 @@ export function UsedAssetCalculatorForm({
     setShowLogicInfo(true);
   };
 
+  /**
+   * カンマ区切り補助表示
+   */
   function formatNumberWithComma(n: string | number | undefined) {
     if (n === '' || n === undefined || n === null) return '';
     const num = Number(String(n).replace(/,/g, ''));
