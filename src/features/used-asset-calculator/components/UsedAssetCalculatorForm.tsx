@@ -28,7 +28,7 @@ export type UsedAssetCalculatorFormValues = {
 };
 
 export function UsedAssetCalculatorForm({
-  cardClassName = "bg-yellow-100/60 dark:bg-yellow-900/40",
+  cardClassName = "",
   inputGroupClassName = "",
 }: {
   cardClassName?: string;
