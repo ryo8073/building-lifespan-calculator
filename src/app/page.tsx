@@ -3,7 +3,6 @@ import React from 'react';
 import { StatutoryLifespanForm } from '@/features/statutory-lifespan/components/StatutoryLifespanForm';
 import { useUsefulLifeStore } from '@/lib/store';
 import { UsedAssetCalculatorForm } from '@/features/used-asset-calculator/components/UsedAssetCalculatorForm';
-import { LogicInfoPanel } from '@/features/used-asset-calculator/components/LogicInfoPanel';
 
 export default function HomePage() {
   const setUsefulLifeEntry = useUsefulLifeStore((s) => s.setUsefulLifeEntry);
@@ -21,10 +20,6 @@ export default function HomePage() {
       {/* 中古資産耐用年数計算グループ */}
       <section className="w-full max-w-2xl mb-8">
         <UsedAssetCalculatorForm cardClassName="bg-yellow-50 dark:bg-yellow-900/20" inputGroupClassName="bg-yellow-100/60 dark:bg-yellow-900/40" />
-      </section>
-      {/* 計算根拠パネル */}
-      <section className="w-full max-w-2xl mb-8">
-        <LogicInfoPanel cardClassName="bg-green-50 dark:bg-green-900/20" />
       </section>
       <footer className="w-full max-w-2xl mt-8 text-xs text-muted-foreground text-center opacity-80">
         &copy; {new Date().getFullYear()} 建物耐用年数 判定・計算アプリ
