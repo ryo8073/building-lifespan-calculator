@@ -68,11 +68,10 @@ export function calculateUsedAssetUsefulLife(input: UsedAssetCalculationInput): 
   if (elapsedYears >= originalUsefulLife) {
     // 月単位で計算
     const originalUsefulLifeMonths = Math.round(originalUsefulLife * 12);
-    const elapsedMonths = Math.round(elapsedYears * 12);
     const y = Math.floor(originalUsefulLifeMonths * 0.2);
     const n = y;
     const rawYears = n / 12;
-    let resultMonths = Math.max(24, y); // 2年未満は2年=24ヶ月
+    const resultMonths = Math.max(24, y); // 2年未満は2年=24ヶ月
     let resultYears = Math.floor(resultMonths / 12);
     if (resultYears < 2) resultYears = 2;
     return {
