@@ -66,41 +66,32 @@ export function calculateUsedAssetUsefulLife(input: UsedAssetCalculationInput): 
   }
   // 法定耐用年数の全部を経過した資産
   if (elapsedYears >= originalUsefulLife) {
-    // 月単位で計算
-    const originalUsefulLifeMonths = Math.round(originalUsefulLife * 12);
-    const y = Math.floor(originalUsefulLifeMonths * 0.2);
-    const n = y;
-    const rawYears = n / 12;
-    const resultMonths = Math.max(24, y); // 2年未満は2年=24ヶ月
-    let resultYears = Math.floor(resultMonths / 12);
-    if (resultYears < 2) resultYears = 2;
+    // 法定耐用年数×0.2で計算（端数切捨て、2年未満は2年）
+    const y = Math.floor(originalUsefulLife * 0.2);
+    const resultYears = y < 2 ? 2 : y;
     return {
       method: '簡便法',
       calculatedUsefulLife: resultYears,
-      formula: '法定耐用年数（月）×20%→年数に換算',
-      breakdown: `法定耐用年数の全部を経過したため、${originalUsefulLifeMonths}×0.2=${y}ヶ月→${rawYears.toFixed(2)}年→${resultYears}年。2年未満の場合は2年。`,
+      formula: '法定耐用年数×20%（端数切捨て、2年未満は2年）',
+      breakdown: `法定耐用年数の全部を経過したため、${originalUsefulLife}×0.2=${(originalUsefulLife*0.2).toFixed(2)}年→${y}年。2年未満の場合は2年。`,
       inputValues: input,
-      kanbenRawYears: rawYears,
+      kanbenRawYears: originalUsefulLife * 0.2,
     };
   }
   // 法定耐用年数の一部を経過した資産
   if (elapsedYears < originalUsefulLife) {
-    // 月単位で計算
-    const originalUsefulLifeMonths = Math.round(originalUsefulLife * 12);
-    const elapsedMonths = Math.round(elapsedYears * 12);
-    const a = originalUsefulLifeMonths - elapsedMonths;
-    const b = Math.floor(elapsedMonths * 0.2);
+    // 年単位で切り捨て計算
+    const a = Math.floor(originalUsefulLife - elapsedYears);
+    const b = Math.floor(elapsedYears * 0.2);
     let n = a + b;
-    if (n < 24) n = 24; // 2年未満は2年=24ヶ月
-    const rawYears = n / 12;
-    const resultYears = Math.floor(n / 12);
+    if (n < 2) n = 2; // 2年未満は2年
     return {
       method: '簡便法',
-      calculatedUsefulLife: resultYears,
-      formula: '(法定耐用年数（月）-経過月)+(経過月×20%)→年数に換算',
-      breakdown: `法定耐用年数の一部を経過したため、(${originalUsefulLifeMonths}-${elapsedMonths})+(${elapsedMonths}×0.2)=${a}+${b}=${n}ヶ月→${rawYears.toFixed(2)}年→${resultYears}年。2年未満の場合は2年。`,
+      calculatedUsefulLife: n,
+      formula: '(法定耐用年数-経過年数)+(経過年数×20%)（各年単位で切捨、2年未満は2年）',
+      breakdown: `法定耐用年数の一部を経過したため、(${originalUsefulLife}-${elapsedYears})+(${elapsedYears}×0.2)=${a}+${b}=${n}年。2年未満の場合は2年。`,
       inputValues: input,
-      kanbenRawYears: rawYears,
+      kanbenRawYears: n,
     };
   }
   // 万一該当しない場合

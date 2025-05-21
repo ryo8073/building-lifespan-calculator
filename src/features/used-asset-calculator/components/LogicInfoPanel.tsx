@@ -31,12 +31,18 @@ export function LogicInfoPanel({
   if (values && values.originalUsefulLife && values.elapsedYears !== undefined) {
     const originalUsefulLifeMonths = Math.round(values.originalUsefulLife * 12);
     const elapsedMonths = Math.round((values.elapsedYears ?? 0) * 12);
-    const a = originalUsefulLifeMonths - elapsedMonths;
-    const b = Math.floor(elapsedMonths * 0.2);
-    const n = a + b;
-    const rawYears = n / 12;
-    const resultYears = Math.floor(Math.max(n, 24) / 12);
-    kanbenExpr = `(${formatNumber(originalUsefulLifeMonths)}-${formatNumber(elapsedMonths)})+(${formatNumber(elapsedMonths)}×0.2)=${formatNumber(a)}+${formatNumber(b)}=${formatNumber(n)}ヶ月→${rawYears.toFixed(2)}年→${resultYears}年`;
+    if (elapsedMonths >= originalUsefulLifeMonths) {
+      // 法定耐用年数を超える場合は法定耐用年数×0.2
+      const y = Math.floor(values.originalUsefulLife * 0.2);
+      kanbenExpr = `${values.originalUsefulLife}×0.2=${(values.originalUsefulLife*0.2).toFixed(2)}年→${y}年（2年未満は2年）`;
+    } else {
+      const a = originalUsefulLifeMonths - elapsedMonths;
+      const b = Math.floor(elapsedMonths * 0.2);
+      const n = a + b;
+      const rawYears = n / 12;
+      const resultYears = Math.floor(Math.max(n, 24) / 12);
+      kanbenExpr = `(${formatNumber(originalUsefulLifeMonths)}-${formatNumber(elapsedMonths)})+(${formatNumber(elapsedMonths)}×0.2)=${formatNumber(a)}+${formatNumber(b)}=${formatNumber(n)}ヶ月→${rawYears.toFixed(2)}年→${resultYears}年（2年未満は2年）`;
+    }
   }
   // 見積法の式（年数で計算、答えも正しい値を表示）
   let mitsumoriExpr = '';

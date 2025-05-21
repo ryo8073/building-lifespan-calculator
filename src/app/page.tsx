@@ -15,11 +15,11 @@ export default function HomePage() {
       </header>
       {/* 法定耐用年数検索グループ */}
       <section className="w-full max-w-2xl mb-8">
-        <StatutoryLifespanForm onUsefulLifeSelected={setUsefulLifeEntry} cardClassName="bg-blue-50 dark:bg-blue-900/20" />
+        <StatutoryLifespanForm onUsefulLifeSelected={setUsefulLifeEntry} cardClassName="bg-blue-50" />
       </section>
       {/* 中古資産耐用年数計算グループ */}
       <section className="w-full max-w-2xl mb-8">
-        <UsedAssetCalculatorForm cardClassName="bg-yellow-50 dark:bg-yellow-900/20" />
+        <UsedAssetCalculatorForm cardClassName="bg-yellow-50" />
       </section>
       <footer className="w-full max-w-2xl mt-8 text-xs text-muted-foreground text-center opacity-80">
         &copy; {new Date().getFullYear()} 建物耐用年数 判定・計算アプリ
