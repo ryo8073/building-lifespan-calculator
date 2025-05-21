@@ -511,7 +511,9 @@ export function UsedAssetCalculatorForm({
   return (
     <Card className={`w-full max-w-2xl p-6 mb-8 shadow-lg ${cardClassName}`}>
       <h2 className="text-xl font-semibold mb-4">2. 中古資産の耐用年数を計算</h2>
-      <Tabs items={tabItems} activeKey={activeTab} onTabChange={setActiveTab} />
+      <Tabs items={tabItems} activeKey={activeTab} onTabChange={(key) => {
+        if (key === 'kanben' || key === 'shihon') setActiveTab(key);
+      }} />
       {/* タブ内のフォームや結果表示はtabItemsで切り替え */}
     </Card>
   );
