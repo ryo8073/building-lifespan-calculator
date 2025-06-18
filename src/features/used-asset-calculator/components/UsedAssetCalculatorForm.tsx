@@ -59,6 +59,17 @@ export function UsedAssetCalculatorForm({
     },
   });
 
+  const handleNumericInputChange = (
+    field: keyof UsedAssetCalculatorFormValues,
+    value: string
+  ) => {
+    // 全角数字を半角に変換し、数字以外の文字を削除
+    const processedValue = value
+      .replace(/[０-９]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 0xFEE0))
+      .replace(/[^0-9]/g, '');
+    setValue(field, processedValue, { shouldValidate: true });
+  };
+
   // usefulLifeEntryが変わったらoriginalUsefulLifeを更新
   React.useEffect(() => {
     setValue('originalUsefulLife', String(usefulLifeEntry?.usefulLife ?? ''));
@@ -170,11 +181,7 @@ export function UsedAssetCalculatorForm({
               inputMode="numeric"
               autoComplete="off"
               value={String(watch('elapsedYears') ?? '')}
-              onChange={e => {
-                const raw = e.target.value.replace(/,/g, '');
-                if (!/^\d*$/.test(raw)) return;
-                setValue('elapsedYears', String(raw), { shouldValidate: true });
-              }}
+              onChange={e => handleNumericInputChange('elapsedYears', e.target.value)}
               name={register('elapsedYears').name}
               ref={register('elapsedYears').ref}
               onBlur={register('elapsedYears').onBlur}
@@ -314,11 +321,7 @@ export function UsedAssetCalculatorForm({
               inputMode="numeric"
               autoComplete="off"
               value={String(watch('originalUsefulLife') ?? '')}
-              onChange={e => {
-                const raw = e.target.value.replace(/,/g, '');
-                if (!/^\d*$/.test(raw)) return;
-                setValue('originalUsefulLife', String(raw), { shouldValidate: true });
-              }}
+              onChange={e => handleNumericInputChange('originalUsefulLife', e.target.value)}
               name={register('originalUsefulLife').name}
               ref={register('originalUsefulLife').ref}
               onBlur={register('originalUsefulLife').onBlur}
@@ -373,11 +376,7 @@ export function UsedAssetCalculatorForm({
               inputMode="numeric"
               autoComplete="off"
               value={String(watch('purchasePrice') ?? '')}
-              onChange={e => {
-                const raw = e.target.value.replace(/,/g, '');
-                if (!/^\d*$/.test(raw)) return;
-                setValue('purchasePrice', String(raw), { shouldValidate: true });
-              }}
+              onChange={e => handleNumericInputChange('purchasePrice', e.target.value)}
               name={register('purchasePrice').name}
               ref={register('purchasePrice').ref}
               onBlur={register('purchasePrice').onBlur}
@@ -399,11 +398,7 @@ export function UsedAssetCalculatorForm({
               inputMode="numeric"
               autoComplete="off"
               value={String(watch('improvementCost') ?? '')}
-              onChange={e => {
-                const raw = e.target.value.replace(/,/g, '');
-                if (!/^\d*$/.test(raw)) return;
-                setValue('improvementCost', String(raw), { shouldValidate: true });
-              }}
+              onChange={e => handleNumericInputChange('improvementCost', e.target.value)}
               name={register('improvementCost').name}
               ref={register('improvementCost').ref}
               onBlur={register('improvementCost').onBlur}
@@ -427,11 +422,7 @@ export function UsedAssetCalculatorForm({
               inputMode="numeric"
               autoComplete="off"
               value={String(watch('originalUsefulLife') ?? '')}
-              onChange={e => {
-                const raw = e.target.value.replace(/,/g, '');
-                if (!/^\d*$/.test(raw)) return;
-                setValue('originalUsefulLife', String(raw), { shouldValidate: true });
-              }}
+              onChange={e => handleNumericInputChange('originalUsefulLife', e.target.value)}
               name={register('originalUsefulLife').name}
               ref={register('originalUsefulLife').ref}
               onBlur={register('originalUsefulLife').onBlur}
@@ -453,11 +444,7 @@ export function UsedAssetCalculatorForm({
               inputMode="numeric"
               autoComplete="off"
               value={String(watch('reacquisitionPrice') ?? '')}
-              onChange={e => {
-                const raw = e.target.value.replace(/,/g, '');
-                if (!/^\d*$/.test(raw)) return;
-                setValue('reacquisitionPrice', String(raw), { shouldValidate: true });
-              }}
+              onChange={e => handleNumericInputChange('reacquisitionPrice', e.target.value)}
               name={register('reacquisitionPrice').name}
               ref={register('reacquisitionPrice').ref}
               onBlur={register('reacquisitionPrice').onBlur}
