@@ -26,25 +26,25 @@ export function LogicInfoPanel({
 }) {
   const [open, setOpen] = useState(true);
   // 動的な式生成
-  // 簡便法の式（月数ベースで途中経過も表示）
+  // 簡便法の式（年ベースで計算 — 本計算ロジックと整合）
   let kanbenExpr = '';
   if (values && values.originalUsefulLife && values.elapsedYears !== undefined) {
-    const originalUsefulLifeMonths = Math.round(values.originalUsefulLife * 12);
-    const elapsedMonths = Math.round((values.elapsedYears ?? 0) * 12);
-    if (elapsedMonths >= originalUsefulLifeMonths) {
-      // 法定耐用年数を超える場合は法定耐用年数×0.2
-      const y = Math.floor(values.originalUsefulLife * 0.2);
-      kanbenExpr = `${values.originalUsefulLife}×0.2=${(values.originalUsefulLife*0.2).toFixed(2)}年→${y}年（2年未満は2年）`;
+    const elapsed = values.elapsedYears ?? 0;
+    if (elapsed >= values.originalUsefulLife) {
+      // 法定耐用年数の全部を経過
+      const rawYears = values.originalUsefulLife * 0.2;
+      const y = Math.floor(rawYears);
+      const resultYears = y < 2 ? 2 : y;
+      kanbenExpr = `${values.originalUsefulLife}×0.2=${rawYears.toFixed(2)}年→${resultYears}年（1年未満端数切捨、2年未満は2年）`;
     } else {
-      const a = originalUsefulLifeMonths - elapsedMonths;
-      const b = Math.floor(elapsedMonths * 0.2);
-      const n = a + b;
-      const rawYears = n / 12;
-      const resultYears = Math.floor(Math.max(n, 24) / 12);
-      kanbenExpr = `(${formatNumber(originalUsefulLifeMonths)}-${formatNumber(elapsedMonths)})+(${formatNumber(elapsedMonths)}×0.2)=${formatNumber(a)}+${formatNumber(b)}=${formatNumber(n)}ヶ月→${rawYears.toFixed(2)}年→${resultYears}年（2年未満は2年）`;
+      // 法定耐用年数の一部を経過（最終結果のみfloor — NTA指針準拠）
+      const rawYears = (values.originalUsefulLife - elapsed) + (elapsed * 0.2);
+      const n = Math.floor(rawYears);
+      const resultYears = n < 2 ? 2 : n;
+      kanbenExpr = `(${values.originalUsefulLife}-${elapsed})+(${elapsed}×0.2)=${rawYears.toFixed(2)}年→${resultYears}年（1年未満端数切捨、2年未満は2年）`;
     }
   }
-  // 見積法の式（年数で計算、答えも正しい値を表示）
+  // 見積法の式（年ベースで計算 — 本計算ロジックと整合）
   let mitsumoriExpr = '';
   if (
     values &&
@@ -53,15 +53,16 @@ export function LogicInfoPanel({
     values.originalUsefulLife !== undefined &&
     values.reacquisitionPrice !== undefined
   ) {
-    // 簡便法の整数年
-    const originalUsefulLifeMonths = Math.round(values.originalUsefulLife * 12);
-    const elapsedMonths = Math.round((values.elapsedYears ?? 0) * 12);
-    const a = originalUsefulLifeMonths - elapsedMonths;
-    const b = Math.floor(elapsedMonths * 0.2);
-    const n = a + b;
-    const kanbenInt = Math.floor(Math.max(n, 24) / 12);
+    const elapsed = values.elapsedYears ?? 0;
+    // 簡便法の結果（年ベース・最終結果のみfloor）
+    let kanbenInt: number;
+    if (elapsed >= values.originalUsefulLife) {
+      kanbenInt = Math.max(Math.floor(values.originalUsefulLife * 0.2), 2);
+    } else {
+      const rawYears = (values.originalUsefulLife - elapsed) + (elapsed * 0.2);
+      kanbenInt = Math.max(Math.floor(rawYears), 2);
+    }
     const purchaseExImprovement = values.purchasePrice - values.improvementCost;
-    // 分母
     const denom = (purchaseExImprovement / kanbenInt) + (values.improvementCost / values.originalUsefulLife);
     const estimated = values.purchasePrice / denom;
     const estimatedFixed = Math.floor(estimated < 2 ? 2 : estimated);

@@ -21,8 +21,14 @@ export default function HomePage() {
       <section className="w-full max-w-2xl mb-8">
         <UsedAssetCalculatorForm cardClassName="bg-yellow-50" />
       </section>
-      <footer className="w-full max-w-2xl mt-8 text-xs text-muted-foreground text-center opacity-80">
-        &copy; {new Date().getFullYear()} 建物耐用年数 判定・計算アプリ
+      <footer className="w-full max-w-2xl mt-8 text-xs text-muted-foreground text-center opacity-80 space-y-1">
+        <p>&copy; {new Date().getFullYear()} 建物耐用年数 判定・計算アプリ</p>
+        <p>
+          参考: <a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/hojin/5404.htm" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">国税庁 No.5404 中古資産の耐用年数</a>
+          {' / '}
+          <a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/pdf/2100_01.pdf" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">主な減価償却資産の耐用年数表</a>
+        </p>
+        <p className="text-[10px]">本アプリの計算結果は参考値です。正式な申告等には税理士等の専門家にご確認ください。</p>
       </footer>
     </main>
   );

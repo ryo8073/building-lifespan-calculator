@@ -159,8 +159,13 @@ export function StatutoryLifespanForm({
         {/* 結果表示 */}
         <div className="pt-4">
           {selectedEntry ? (
-            <div className="rounded-md bg-accent/40 p-4 border border-accent text-lg font-bold text-primary flex items-center gap-2" aria-live="polite">
-              法定耐用年数: <span className="text-2xl">{selectedEntry.usefulLife} 年</span>
+            <div className="rounded-md bg-green-100 p-4 border border-green-400 text-lg font-bold text-green-900" aria-live="polite">
+              <div className="flex items-center gap-2">
+                法定耐用年数: <span className="text-2xl">{selectedEntry.usefulLife} 年</span>
+              </div>
+              <div className="text-xs font-normal text-muted-foreground mt-1">
+                {selectedEntry.structureUsage} / {selectedEntry.details}{selectedEntry.thickness ? ` / ${selectedEntry.thickness}` : ''}
+              </div>
             </div>
           ) : (
             <div className="text-muted-foreground text-sm" aria-live="polite">

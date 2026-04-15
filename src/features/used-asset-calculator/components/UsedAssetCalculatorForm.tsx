@@ -313,13 +313,14 @@ export function UsedAssetCalculatorForm({
           {/* 法定耐用年数 */}
           <div className={`p-4 mb-2 ${inputGroupClassName}`}>
             <Label htmlFor="originalUsefulLife" required>
-              法定耐用年数 <span className="text-red-500">*</span>
+              法定耐用年数（年） <span className="text-red-500">*</span>
             </Label>
             <Input
               id="originalUsefulLife"
               type="text"
               inputMode="numeric"
               autoComplete="off"
+              placeholder="上記の検索結果から自動入力されます"
               value={String(watch('originalUsefulLife') ?? '')}
               onChange={e => handleNumericInputChange('originalUsefulLife', e.target.value)}
               name={register('originalUsefulLife').name}
@@ -368,13 +369,14 @@ export function UsedAssetCalculatorForm({
           {/* 購入価額・改良費・経過年数入力欄（経過年数欄は上記切り替えUI） */}
           <div className={`p-4 mb-2 ${inputGroupClassName}`}>
             <Label htmlFor="purchasePrice" required>
-              購入価額 <span className="text-red-500">*</span>
+              購入価額（円） <span className="text-red-500">*</span>
             </Label>
             <Input
               id="purchasePrice"
               type="text"
               inputMode="numeric"
               autoComplete="off"
+              placeholder="例: 10000000"
               value={String(watch('purchasePrice') ?? '')}
               onChange={e => handleNumericInputChange('purchasePrice', e.target.value)}
               name={register('purchasePrice').name}
@@ -386,17 +388,18 @@ export function UsedAssetCalculatorForm({
             {errors.purchasePrice && (
               <span id="purchasePrice-error" className="text-red-500 text-xs">{errors.purchasePrice.message}</span>
             )}
-            <div className="text-xs text-muted-foreground mt-1">{formatNumberWithComma(watch('purchasePrice'))}</div>
+            {watch('purchasePrice') && <div className="text-xs text-muted-foreground mt-1">{formatNumberWithComma(watch('purchasePrice'))} 円</div>}
           </div>
           <div className={`p-4 mb-2 ${inputGroupClassName}`}>
             <Label htmlFor="improvementCost">
-              うち改良に要した金額
+              うち改良に要した金額（円）
             </Label>
             <Input
               id="improvementCost"
               type="text"
               inputMode="numeric"
               autoComplete="off"
+              placeholder="例: 5000000"
               value={String(watch('improvementCost') ?? '')}
               onChange={e => handleNumericInputChange('improvementCost', e.target.value)}
               name={register('improvementCost').name}
@@ -408,19 +411,20 @@ export function UsedAssetCalculatorForm({
             {errors.improvementCost && (
               <span id="improvementCost-error" className="text-red-500 text-xs">{errors.improvementCost.message}</span>
             )}
-            <div className="text-xs text-muted-foreground mt-1">{formatNumberWithComma(watch('improvementCost'))}</div>
+            {watch('improvementCost') && <div className="text-xs text-muted-foreground mt-1">{formatNumberWithComma(watch('improvementCost'))} 円</div>}
           </div>
           {elapsedInputFields}
           {/* 法定耐用年数 */}
           <div className={`p-4 mb-2 ${inputGroupClassName}`}>
             <Label htmlFor="originalUsefulLife" required>
-              法定耐用年数 <span className="text-red-500">*</span>
+              法定耐用年数（年） <span className="text-red-500">*</span>
             </Label>
             <Input
               id="originalUsefulLife"
               type="text"
               inputMode="numeric"
               autoComplete="off"
+              placeholder="上記の検索結果から自動入力されます"
               value={String(watch('originalUsefulLife') ?? '')}
               onChange={e => handleNumericInputChange('originalUsefulLife', e.target.value)}
               name={register('originalUsefulLife').name}
@@ -436,13 +440,14 @@ export function UsedAssetCalculatorForm({
           {/* 再取得価額 */}
           <div className={`p-4 mb-2 ${inputGroupClassName}`}>
             <Label htmlFor="reacquisitionPrice">
-              再取得価額
+              再取得価額（円）
             </Label>
             <Input
               id="reacquisitionPrice"
               type="text"
               inputMode="numeric"
               autoComplete="off"
+              placeholder="例: 20000000"
               value={String(watch('reacquisitionPrice') ?? '')}
               onChange={e => handleNumericInputChange('reacquisitionPrice', e.target.value)}
               name={register('reacquisitionPrice').name}
@@ -454,7 +459,7 @@ export function UsedAssetCalculatorForm({
             {errors.reacquisitionPrice && (
               <span id="reacquisitionPrice-error" className="text-red-500 text-xs">{errors.reacquisitionPrice.message}</span>
             )}
-            <div className="text-xs text-muted-foreground mt-1">{formatNumberWithComma(watch('reacquisitionPrice'))}</div>
+            {watch('reacquisitionPrice') && <div className="text-xs text-muted-foreground mt-1">{formatNumberWithComma(watch('reacquisitionPrice'))} 円</div>}
           </div>
           {/* ボタン */}
           <div className="flex items-center justify-between pt-2">
@@ -498,6 +503,11 @@ export function UsedAssetCalculatorForm({
   return (
     <Card className={`w-full max-w-2xl p-6 mb-8 shadow-lg ${cardClassName}`}>
       <h2 className="text-xl font-semibold mb-4">2. 中古資産の耐用年数を計算</h2>
+      {usefulLifeEntry && (
+        <div className="text-sm text-blue-700 bg-blue-50 border border-blue-200 rounded p-2 mb-4">
+          上記の検索結果から法定耐用年数 <span className="font-bold">{usefulLifeEntry.usefulLife}年</span> が自動入力されています。
+        </div>
+      )}
       <Tabs items={tabItems} activeKey={activeTab} onTabChange={(key) => {
         if (key === 'kanben' || key === 'shihon') setActiveTab(key);
       }} />
